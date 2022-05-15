@@ -51,7 +51,7 @@ public:
 	wxButton* m_extra_decimal_point = nullptr;
 	wxButton* m_extra_clear_number = nullptr;
 	wxButton* m_extra_clear_char = nullptr;
-	wxButton* m_extra_memory_plus = nullptr;
+	wxButton* m_modulo = nullptr;
 	wxButton* m_extra_sign = nullptr;
 
 	wxListBox* m_results_list = nullptr;
@@ -79,7 +79,7 @@ public:
 
 	void OnExtraDecimal(wxCommandEvent& evt);
 	void OnExtraSign(wxCommandEvent& evt);
-	void OnExtraMemoryPlus(wxCommandEvent& evt);
+	void Modulo(wxCommandEvent& evt);
 	void OnExtraClearNumber(wxCommandEvent& evt);
 	void OnExtraClearChar(wxCommandEvent& evt);
 
