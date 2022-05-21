@@ -1,4 +1,6 @@
 #include "cMain.h"
+#include "ButtonFactory.h"
+
 wxBEGIN_EVENT_TABLE(cMain, wxFrame)
 EVT_BUTTON(wxID_ANY, OnButtonClicked)
 wxEND_EVENT_TABLE()
@@ -13,37 +15,39 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Calculator Lab", wxPoint(30, 30), w
 	clearBtn = new wxButton(this, 20, "CLR", wxPoint(375, 0), wxSize(125, 275));
 	wxFont font(30, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false);
 
-#pragma region Newing Buttons
+#pragma region Creating Buttons
+	ButtonFactory factory = ButtonFactory(this);
 	// Newing Buttons
+	clearBtn = factory.CreateClearButton();
 	// Row 1
-	binaryBtn = new wxButton(this, 10, "BIN", wxPoint(0, 275), wxSize(125, 100));
-	hexBtn = new wxButton(this, 11, "HEX", wxPoint(125, 275), wxSize(125, 100));
-	decimalBtn = new wxButton(this, 12, "DEC", wxPoint(250, 275), wxSize(125, 100));
-	divideBtn = new wxButton(this, 13, "/", wxPoint(375, 275), wxSize(125, 100));
+	binaryBtn = factory.CreateBinaryButton();
+	hexBtn = factory.CreateHexButton();
+	decimalBtn = factory.CreateDecimalButton();
+	divideBtn = factory.CreateDivideButton();
 
-	// Row 2
-	sevenBtn = new wxButton(this, 7, "7", wxPoint(0, 375), wxSize(125, 100));
-	eightBtn = new wxButton(this, 8, "8", wxPoint(125, 375), wxSize(125, 100));
-	nineBtn = new wxButton(this, 9, "9", wxPoint(250, 375), wxSize(125, 100));
-	multBtn = new wxButton(this, 14, "*", wxPoint(375, 375), wxSize(125, 100));
+	// Row 2		
+	sevenBtn = factory.CreateSevenButton();
+	eightBtn = factory.CreateEightButton();
+	nineBtn = factory.CreateNineButton();
+	multBtn = factory.CreateMultButton();
 
-	// Row 3
-	fourBtn = new wxButton(this, 4, "4", wxPoint(0, 475), wxSize(125, 100));
-	fiveBtn = new wxButton(this, 5, "5", wxPoint(125, 475), wxSize(125, 100));
-	sixBtn = new wxButton(this, 6, "6", wxPoint(250, 475), wxSize(125, 100));
-	subtractBtn = new wxButton(this, 15, "-", wxPoint(375, 475), wxSize(125, 100));
+	// Row 3		
+	fourBtn = factory.CreateFourButton();
+	fiveBtn = factory.CreateFiveButton();
+	sixBtn = factory.CreateSixButton();
+	subtractBtn = factory.CreateSubtractButton();
 
-	// Row 4
-	oneBtn = new wxButton(this, 1, "1", wxPoint(0, 575), wxSize(125, 100));
-	twoBtn = new wxButton(this, 2, "2", wxPoint(125, 575), wxSize(125, 100));
-	threeBtn = new wxButton(this, 3, "3", wxPoint(250, 575), wxSize(125, 100));
-	addBtn = new wxButton(this, 16, "+", wxPoint(375, 575), wxSize(125, 100));
+	// Row 4		
+	oneBtn = factory.CreateOneButton();
+	twoBtn = factory.CreateTwoButton();
+	threeBtn = factory.CreateThreeButton();
+	addBtn = factory.CreateAddButton();
 
-	// Row 5
-	negativeBtn = new wxButton(this, 19, "(-)", wxPoint(0, 675), wxSize(125, 100));
-	zeroBtn = new wxButton(this, 0, "0", wxPoint(125, 675), wxSize(125, 100));
-	modBtn = new wxButton(this, 18, "%", wxPoint(250, 675), wxSize(125, 100));
-	equalsBtn = new wxButton(this, 17, "=", wxPoint(375, 675), wxSize(125, 100));
+	// Row 5		
+	negativeBtn = factory.CreateNegativeButton();
+	zeroBtn = factory.CreateZeroButton();
+	modBtn = factory.CreateModButton();
+	equalsBtn = factory.CreateEqualsButton();
 #pragma endregion
 
 #pragma region Setting Buttons Colors/Fonts
@@ -131,9 +135,10 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Calculator Lab", wxPoint(30, 30), w
 
 cMain::~cMain()
 {
-
+	delete[] operatorIDs;
 }
 
+#pragma region On Button Clicked
 void cMain::OnButtonClicked(wxCommandEvent& evt)
 {
 
@@ -225,7 +230,7 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	// Divide
 	case divide:
 	{
-		operatorID = divide;
+		operatorIDs->push_back(divide);
 		GetInputValue();
 		*outputTxt << " / ";
 		break;
@@ -233,7 +238,7 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	// Mult
 	case mult:
 	{
-		operatorID = mult;
+		operatorIDs->push_back(mult);
 		GetInputValue();
 		*outputTxt << " * ";
 		break;
@@ -241,7 +246,7 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	// Sub
 	case subtract:
 	{
-		operatorID = subtract;
+		operatorIDs->push_back(subtract);
 		GetInputValue();
 		*outputTxt << " - ";
 
@@ -250,7 +255,7 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	// add
 	case add:
 	{
-		operatorID = add;
+		operatorIDs->push_back(add);
 		GetInputValue();
 		*outputTxt << " + ";
 		break;
@@ -259,15 +264,15 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	case equals:
 	{
 		GetInputValue();
-		// Uncomment when doing actual functionality of calculator
 		*outputTxt << " = ";
+		// Uncomment when doing actual functionality of calculator
 		CalculateEquation();
 		break;
 	}
 	// Mod
 	case mod:
 	{
-		operatorID = mod;
+		operatorIDs->push_back(mod);
 
 		GetInputValue();
 		*outputTxt << " MOD ";
@@ -276,7 +281,7 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	// Negate
 	case negative:
 	{
-		operatorID = negative;
+		operatorIDs->push_back(negative);
 		GetInputValue();
 		// Uncomment when doing actual functionality of calculator
 		//CalculateEquation();
@@ -288,6 +293,7 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	{
 		outputTxt->Clear();
 		calcValues.clear();
+		operatorIDs->clear();
 		calcAnswer = 0;
 		break;
 	}
@@ -307,7 +313,10 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 
 	evt.Skip();
 }
+#pragma endregion
 
+
+#pragma region Get Input Value
 void cMain::GetInputValue()
 {
 	wxString txtValue = outputTxt->GetValue();
@@ -315,76 +324,83 @@ void cMain::GetInputValue()
 	txtValue.ToDouble(&fValue);
 	calcValues.push_back(fValue);
 
-
 }
+#pragma endregion
 
+
+#pragma region Calculate Equation 
 void cMain::CalculateEquation()
 {
-	if (calcValues.size() < 2)
+	if (calcValues.size() == 0)
 	{
+		return;
+	}
+	else if (calcValues.size() < 2 && calcValues.size() != 0)
+	{
+		calcAnswer = calcValues[0];
 		*outputTxt << calcAnswer;
 		return;
 	}
-	switch (operatorID)
-	{
-		// Divide
-	case divide:
-	{
-		calcAnswer = calcValues[0] / calcValues[1];
-		calcValues.clear();
-		*outputTxt << calcAnswer;
 
-		break;
-	}
-	// Mult
-	case mult:
+	for (int i = 0; i < operatorIDs->size(); i++)
 	{
-
-		calcAnswer = calcValues[0] * calcValues[1];
-		calcValues.clear();
-		*outputTxt << calcAnswer;
-		break;
-	}
-	// Sub
-	case subtract:
-	{
-
-		calcAnswer = calcValues[0] - calcValues[1];
-		calcValues.clear();
-		*outputTxt << calcAnswer;
-		break;
-	}
-	// add
-	case add:
-	{
-
-		for (int i = 0; i < calcValues.size(); i++)
+		switch (operatorIDs->at(i))
 		{
-			calcAnswer += calcValues[i];
+			// Divide
+		case divide:
+		{
+			calcAnswer = calcValues[0] / calcValues[1];
+
+			break;
 		}
-		calcValues.clear();
-		*outputTxt << calcAnswer;
-		calcAnswer = 0;
-		break;
+		// Mult
+		case mult:
+		{
+			calcValues[i + 1] *= calcValues[i];
+			break;
+		}
+		// Sub
+		case subtract:
+		{
+			calcValues[i + 1] -= calcValues[i];
+
+			break;
+		}
+		// add
+		case add:
+		{
+			calcValues[i + 1] += calcValues[i];
+
+			break;
+		}
+		// Mod
+		case mod:
+		{
+			calcAnswer = fmod(calcValues[0], calcValues[1]);
+
+			break;
+		}
+		// Negate
+		case negative:
+		{
+			calcAnswer = calcValues[0] * -1;
+
+			break;
+		}
+		default:
+			break;
+		}
 	}
-	// Mod
-	case mod:
+	calcAnswer = calcValues[calcValues.size() - 1];
+	if (calcAnswer == (int)calcAnswer)
+	{
+		*outputTxt << (int)calcAnswer;
+	}
+	else
 	{
 
-		calcAnswer = fmod(calcValues[0], calcValues[1]);
-		calcValues.clear();
 		*outputTxt << calcAnswer;
-		break;
-	}
-	// Negate
-	case negative:
-	{
-		calcAnswer = calcValues[0] * -1;
-		calcValues.clear();
-		*outputTxt << calcAnswer;
-		break;
-	}
-	default:
-		break;
 	}
 }
+#pragma endregion
+
