@@ -12,8 +12,16 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Calculator Lab", wxPoint(30, 30), w
 {
 
 	outputTxt = new wxTextCtrl(this, 101, "", wxPoint(0, 0), wxSize(375, 275), wxTE_RIGHT);
-	clearBtn = new wxButton(this, 20, "CLR", wxPoint(375, 0), wxSize(125, 275));
 	wxFont font(30, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false);
+
+#pragma region Setting Output Text Color/Font
+	// Output Text Box Font
+	outputTxt->SetFont(font);
+
+	// Output Text box color
+	outputTxt->SetBackgroundColour(wxColour(*wxBLACK));
+	outputTxt->SetOwnForegroundColour(wxColour(*wxWHITE));
+#pragma endregion
 
 #pragma region Creating Buttons
 	ButtonFactory factory = ButtonFactory(this);
@@ -50,92 +58,12 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Calculator Lab", wxPoint(30, 30), w
 	equalsBtn = factory.CreateEqualsButton();
 #pragma endregion
 
-#pragma region Setting Buttons Colors/Fonts
-	// setting buttons colors
-	clearBtn->SetBackgroundColour(wxColour(33, 203, 169));
-	zeroBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	oneBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	twoBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	threeBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	fourBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	fiveBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	sixBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	sevenBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	eightBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	nineBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	binaryBtn->SetBackgroundColour(wxColour(128, 0, 64));
-	hexBtn->SetBackgroundColour(wxColour(128, 0, 64));
-	decimalBtn->SetBackgroundColour(wxColour(128, 0, 64));
-	divideBtn->SetBackgroundColour(wxColour(0, 128, 128));
-	multBtn->SetBackgroundColour(wxColour(0, 128, 128));
-	subtractBtn->SetBackgroundColour(wxColour(0, 128, 128));
-	addBtn->SetBackgroundColour(wxColour(0, 128, 128));
-	modBtn->SetBackgroundColour(wxColour(128, 0, 64));
-	negativeBtn->SetBackgroundColour(wxColour(128, 0, 64));
-	equalsBtn->SetBackgroundColour(wxColour(239, 62, 91));
-
-	// Setting button fonts
-	clearBtn->SetFont(font);
-	zeroBtn->SetFont(font);
-	oneBtn->SetFont(font);
-	twoBtn->SetFont(font);
-	threeBtn->SetFont(font);
-	fourBtn->SetFont(font);
-	fiveBtn->SetFont(font);
-	sixBtn->SetFont(font);
-	sevenBtn->SetFont(font);
-	eightBtn->SetFont(font);
-	nineBtn->SetFont(font);
-	binaryBtn->SetFont(font);
-	hexBtn->SetFont(font);
-	decimalBtn->SetFont(font);
-	divideBtn->SetFont(font);
-	multBtn->SetFont(font);
-	subtractBtn->SetFont(font);
-	addBtn->SetFont(font);
-	equalsBtn->SetFont(font);
-	modBtn->SetFont(font);
-	negativeBtn->SetFont(font);
-
-	// Setting Buttons Foreground Color
-	clearBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	zeroBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	oneBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	twoBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	threeBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	fourBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	fiveBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	sixBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	sevenBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	eightBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	nineBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	binaryBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	hexBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	decimalBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	divideBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	multBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	subtractBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	addBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	equalsBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	modBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-	negativeBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
-
-#pragma endregion
-
-#pragma region Setting Output Text Color/Font
-	// Output Text Box Font
-	outputTxt->SetFont(font);
-
-	// Output Text box color
-	outputTxt->SetBackgroundColour(wxColour(*wxBLACK));
-	outputTxt->SetOwnForegroundColour(wxColour(*wxWHITE));
-#pragma endregion
-
+	SetButtonsFormat();
 }
-
 cMain::~cMain()
 {
 	delete[] operatorIDs;
+	delete[] calcValues;
 }
 
 #pragma region On Button Clicked
@@ -205,14 +133,14 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	case binary:
 	{
 		GetInputValue();
-		*outputTxt << " BINARY ";
+		outputTxt->Clear();
 		break;
 	}
 	// Hex
 	case hex:
 	{
 		GetInputValue();
-		*outputTxt << " HEXADECIMAL ";
+		outputTxt->Clear();
 
 		break;
 	}
@@ -220,7 +148,7 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	case decimal:
 	{
 		GetInputValue();
-		*outputTxt << " DECMAL ";
+		outputTxt->Clear();
 
 		break;
 	}
@@ -232,7 +160,7 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	{
 		operatorIDs->push_back(divide);
 		GetInputValue();
-		*outputTxt << " / ";
+		outputTxt->Clear();
 		break;
 	}
 	// Mult
@@ -240,7 +168,7 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	{
 		operatorIDs->push_back(mult);
 		GetInputValue();
-		*outputTxt << " * ";
+		outputTxt->Clear();
 		break;
 	}
 	// Sub
@@ -248,7 +176,7 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	{
 		operatorIDs->push_back(subtract);
 		GetInputValue();
-		*outputTxt << " - ";
+		outputTxt->Clear();
 
 		break;
 	}
@@ -257,44 +185,52 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	{
 		operatorIDs->push_back(add);
 		GetInputValue();
-		*outputTxt << " + ";
+		outputTxt->Clear();
 		break;
 	}
 	// Equals
 	case equals:
 	{
 		GetInputValue();
-		*outputTxt << " = ";
-		// Uncomment when doing actual functionality of calculator
-		CalculateEquation();
+		outputTxt->Clear();
+		double calcAnswer = processor->CalculateEquation(calcValues, operatorIDs);
+
+		if (calcAnswer == (int)calcAnswer)
+		{
+			*outputTxt << (int)calcAnswer;
+		}
+		else
+		{
+
+			*outputTxt << calcAnswer;
+		}
 		break;
 	}
 	// Mod
 	case mod:
 	{
 		operatorIDs->push_back(mod);
-
 		GetInputValue();
-		*outputTxt << " MOD ";
+		outputTxt->Clear();
 		break;
 	}
 	// Negate
 	case negative:
 	{
-		operatorIDs->push_back(negative);
-		GetInputValue();
-		// Uncomment when doing actual functionality of calculator
-		//CalculateEquation();
-		*outputTxt << " NEGATE ";
+		wxString txtValue = outputTxt->GetValue();
+		double temp = 0;
+		txtValue.ToDouble(&temp);
+		temp = temp * -1;
+		outputTxt->Clear();
+		*outputTxt << temp;
 		break;
 	}
 	// clear
 	case clear:
 	{
 		outputTxt->Clear();
-		calcValues.clear();
+		calcValues->clear();
 		operatorIDs->clear();
-		calcAnswer = 0;
 		break;
 	}
 #pragma endregion
@@ -315,92 +251,182 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 }
 #pragma endregion
 
-
 #pragma region Get Input Value
 void cMain::GetInputValue()
 {
 	wxString txtValue = outputTxt->GetValue();
 	double fValue = 0;
 	txtValue.ToDouble(&fValue);
-	calcValues.push_back(fValue);
+	calcValues->push_back(fValue);
 
 }
 #pragma endregion
+
 
 
 #pragma region Calculate Equation 
-void cMain::CalculateEquation()
+//void cMain::CalculateEquation()
+//{
+//	if (calcValues.size() == 0)
+//	{
+//		return;
+//	}
+//	else if (calcValues.size() < 2 && calcValues.size() != 0)
+//	{
+//		calcAnswer = calcValues[0];
+//		*outputTxt << calcAnswer;
+//		return;
+//	}
+//
+//	for (int i = 0; i < operatorIDs->size(); i++)
+//	{
+//		switch (operatorIDs->at(i))
+//		{
+//			// Divide
+//		case divide:
+//		{
+//			calcAnswer = calcValues[0] / calcValues[1];
+//
+//			break;
+//		}
+//		// Mult
+//		case mult:
+//		{
+//			calcValues[i + 1] *= calcValues[i];
+//			break;
+//		}
+//		// Sub
+//		case subtract:
+//		{
+//			calcValues[i + 1] -= calcValues[i];
+//
+//			break;
+//		}
+//		// add
+//		case add:
+//		{
+//			calcValues[i + 1] += calcValues[i];
+//
+//			break;
+//		}
+//		// Mod
+//		case mod:
+//		{
+//			calcAnswer = fmod(calcValues[0], calcValues[1]);
+//
+//			break;
+//		}
+//		// Negate
+//		case negative:
+//		{
+//			calcAnswer = calcValues[0] * -1;
+//
+//			break;
+//		}
+//		default:
+//			break;
+//		}
+//	}
+//	calcAnswer = calcValues[calcValues.size() - 1];
+//	if (calcAnswer == (int)calcAnswer)
+//	{
+//		*outputTxt << (int)calcAnswer;
+//	}
+//	else
+//	{
+//
+//		*outputTxt << calcAnswer;
+//	}
+//}
+#pragma endregion
+
+
+
+#pragma region Setting Buttons Colors/Fonts
+void cMain::SetButtonsFormat()
 {
-	if (calcValues.size() == 0)
-	{
-		return;
-	}
-	else if (calcValues.size() < 2 && calcValues.size() != 0)
-	{
-		calcAnswer = calcValues[0];
-		*outputTxt << calcAnswer;
-		return;
-	}
+	wxFont font(30, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false);
+	// setting buttons colors
+	clearBtn->SetBackgroundColour(wxColour(33, 203, 169));
+	zeroBtn->SetBackgroundColour(wxColour(133, 19, 157));
+	oneBtn->SetBackgroundColour(wxColour(133, 19, 157));
+	twoBtn->SetBackgroundColour(wxColour(133, 19, 157));
+	threeBtn->SetBackgroundColour(wxColour(133, 19, 157));
+	fourBtn->SetBackgroundColour(wxColour(133, 19, 157));
+	fiveBtn->SetBackgroundColour(wxColour(133, 19, 157));
+	sixBtn->SetBackgroundColour(wxColour(133, 19, 157));
+	sevenBtn->SetBackgroundColour(wxColour(133, 19, 157));
+	eightBtn->SetBackgroundColour(wxColour(133, 19, 157));
+	nineBtn->SetBackgroundColour(wxColour(133, 19, 157));
+	binaryBtn->SetBackgroundColour(wxColour(128, 0, 64));
+	hexBtn->SetBackgroundColour(wxColour(128, 0, 64));
+	decimalBtn->SetBackgroundColour(wxColour(128, 0, 64));
+	divideBtn->SetBackgroundColour(wxColour(0, 128, 128));
+	multBtn->SetBackgroundColour(wxColour(0, 128, 128));
+	subtractBtn->SetBackgroundColour(wxColour(0, 128, 128));
+	addBtn->SetBackgroundColour(wxColour(0, 128, 128));
+	modBtn->SetBackgroundColour(wxColour(128, 0, 64));
+	negativeBtn->SetBackgroundColour(wxColour(128, 0, 64));
+	equalsBtn->SetBackgroundColour(wxColour(239, 62, 91));
 
-	for (int i = 0; i < operatorIDs->size(); i++)
-	{
-		switch (operatorIDs->at(i))
-		{
-			// Divide
-		case divide:
-		{
-			calcAnswer = calcValues[0] / calcValues[1];
+	// Setting button fonts
+	clearBtn->SetFont(font);
+	zeroBtn->SetFont(font);
+	oneBtn->SetFont(font);
+	twoBtn->SetFont(font);
+	threeBtn->SetFont(font);
+	fourBtn->SetFont(font);
+	fiveBtn->SetFont(font);
+	sixBtn->SetFont(font);
+	sevenBtn->SetFont(font);
+	eightBtn->SetFont(font);
+	nineBtn->SetFont(font);
+	binaryBtn->SetFont(font);
+	hexBtn->SetFont(font);
+	decimalBtn->SetFont(font);
+	divideBtn->SetFont(font);
+	multBtn->SetFont(font);
+	subtractBtn->SetFont(font);
+	addBtn->SetFont(font);
+	equalsBtn->SetFont(font);
+	modBtn->SetFont(font);
+	negativeBtn->SetFont(font);
 
-			break;
-		}
-		// Mult
-		case mult:
-		{
-			calcValues[i + 1] *= calcValues[i];
-			break;
-		}
-		// Sub
-		case subtract:
-		{
-			calcValues[i + 1] -= calcValues[i];
-
-			break;
-		}
-		// add
-		case add:
-		{
-			calcValues[i + 1] += calcValues[i];
-
-			break;
-		}
-		// Mod
-		case mod:
-		{
-			calcAnswer = fmod(calcValues[0], calcValues[1]);
-
-			break;
-		}
-		// Negate
-		case negative:
-		{
-			calcAnswer = calcValues[0] * -1;
-
-			break;
-		}
-		default:
-			break;
-		}
-	}
-	calcAnswer = calcValues[calcValues.size() - 1];
-	if (calcAnswer == (int)calcAnswer)
-	{
-		*outputTxt << (int)calcAnswer;
-	}
-	else
-	{
-
-		*outputTxt << calcAnswer;
-	}
+	// Setting Buttons Foreground Color
+	clearBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	zeroBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	oneBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	twoBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	threeBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	fourBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	fiveBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	sixBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	sevenBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	eightBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	nineBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	binaryBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	hexBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	decimalBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	divideBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	multBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	subtractBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	addBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	equalsBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	modBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
+	negativeBtn->SetOwnForegroundColour(wxColour(*wxWHITE));
 }
 #pragma endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
 
