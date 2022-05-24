@@ -1,16 +1,18 @@
 #pragma once
 #include "wx\wx.h"
 #include <vector>
+#include "CalculatorProcessor.h"
+
 class cMain : public wxFrame
 {
 public:
 	cMain();
 	~cMain();
-public:
-	std::vector<double> calcValues;
-
-	double calcAnswer = 0;
+private:
+	std::vector<double>* calcValues = new std::vector<double>();
 	std::vector<int>* operatorIDs = new std::vector<int>();
+	CalculatorProcessor* processor = &CalculatorProcessor::GetInstance();;
+
 #pragma region Initialize Buttons Members
 
 	wxTextCtrl* outputTxt = nullptr;
@@ -40,6 +42,7 @@ public:
 	void OnButtonClicked(wxCommandEvent& evt);
 	void GetInputValue();
 	void CalculateEquation();
+	void SetButtonsFormat();
 	wxDECLARE_EVENT_TABLE();
 
 };
