@@ -348,16 +348,16 @@ void cMain::SetButtonsFormat()
 	wxFont font(30, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false);
 	// setting buttons colors
 	clearBtn->SetBackgroundColour(wxColour(33, 203, 169));
-	zeroBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	oneBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	twoBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	threeBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	fourBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	fiveBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	sixBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	sevenBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	eightBtn->SetBackgroundColour(wxColour(133, 19, 157));
-	nineBtn->SetBackgroundColour(wxColour(133, 19, 157));
+	zeroBtn->SetBackgroundColour(wxColour(0, 0, 0));
+	oneBtn->SetBackgroundColour(wxColour(0, 0, 0));
+	twoBtn->SetBackgroundColour(wxColour(0, 0, 0));
+	threeBtn->SetBackgroundColour(wxColour(0, 0, 0));
+	fourBtn->SetBackgroundColour(wxColour(0, 0, 0));
+	fiveBtn->SetBackgroundColour(wxColour(0, 0, 0));
+	sixBtn->SetBackgroundColour(wxColour(0, 0, 0));
+	sevenBtn->SetBackgroundColour(wxColour(0, 0, 0));
+	eightBtn->SetBackgroundColour(wxColour(0, 0, 0));
+	nineBtn->SetBackgroundColour(wxColour(0, 0, 0));
 	binaryBtn->SetBackgroundColour(wxColour(128, 0, 64));
 	hexBtn->SetBackgroundColour(wxColour(128, 0, 64));
 	decimalBtn->SetBackgroundColour(wxColour(128, 0, 64));
